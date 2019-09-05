@@ -226,7 +226,6 @@ adiHalErr_t AD9528_initDeviceDataStruct(ad9528Device_t *device,
 	status = gpio_get(&device->gpio_resetb, CLK_RESETB);
 	status |= gpio_get(&device->gpio_sysref_req, ADRV_SYSREF_REQ);
 
-	spi_param.id = 0;
 	spi_param.mode = SPI_MODE_0;
 	spi_param.chip_select = CLK_CS;
 	status |= spi_init(&device->spi_desc, &spi_param);

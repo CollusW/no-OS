@@ -61,7 +61,6 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 
 	status = gpio_get(&dev_hal_data->gpio_adrv_resetb, ADRV_RESETB);
 
-	spi_param.id = 0;
 	spi_param.mode = SPI_MODE_0;
 	spi_param.chip_select = ADRV_CS;
 #ifndef ALTERA_PLATFORM
