@@ -104,7 +104,7 @@ struct ad77681_init_param ADC_default_init_param = {
 	AD77681_POSITIVE_FS,		// diag_mux_sel
 	false,						// conv_diag_sel
 	AD77681_CONV_16BIT,			// conv_len
-	AD77681_CRC, 				// crc_sel
+	AD77681_NO_CRC, 				// crc_sel
 	0 							// status_bit
 };
 
@@ -119,6 +119,7 @@ void mdelay(uint32_t msecs)
 }
 
 #define SPI_ENGINE_OFFLOAD_EXAMPLE	0
+#define TEST_MODE					1
 
 int main()
 {
@@ -133,6 +134,17 @@ int main()
 
 	ad77681_setup(&adc_dev, ADC_default_init_param);
 
+	if (TEST_MODE == 1)
+	{
+		adc_data[0] = 0x01;
+		adc_data[0] = 0x02;
+		while(1)
+		{
+			spi_set_transfer_length(adc_dev->spi_desc, 8);
+			spi_write_and_read(adc_dev->spi_desc, adc_data,2,1);
+			mdelay(1000);
+		}
+	}
 	if (SPI_ENGINE_OFFLOAD_EXAMPLE == 0) {
 		while(1) {
 			ad77681_spi_read_adc_data(adc_dev, adc_data);
@@ -141,7 +153,7 @@ int main()
 				printf("%x", adc_data[i]);
 			}
 			printf("\r\n");
-			mdelay(1000);
+			mdelay(300);
 		}
 	} else { // offload example
 		msg = (spi_eng_msg *)malloc(sizeof(*msg));
